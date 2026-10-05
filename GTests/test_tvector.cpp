@@ -755,3 +755,62 @@ TEST(ClassVector, can_move_assigment) {
         EXPECT_DOUBLE_EQ(vec_2[i], i + 1);
     }
 }
+
+TEST(ClassVector, StandardShrink) {
+    Vector<double> v;
+    v.push_back(1.0);
+    v.push_back(2.0);
+    v.push_back(3.0);
+
+    size_t expected_bytes_before = v.get_capacity() * sizeof(double);
+    EXPECT_TRUE(expected_bytes_before >= 3 * sizeof(double));
+
+    v.shrink_to_fit();
+
+    size_t actual_bytes = v.get_capacity() * sizeof(double);
+    size_t expected_bytes_after = v.get_capacity() * sizeof(double);
+
+    EXPECT_EQ(actual_bytes, expected_bytes_after);
+    EXPECT_EQ(actual_bytes, 3 * sizeof(double));
+
+    EXPECT_EQ(v.get_capacity(), v.get_size());
+    EXPECT_DOUBLE_EQ(v[0], 1.0);
+    EXPECT_DOUBLE_EQ(v[1], 2.0);
+    EXPECT_DOUBLE_EQ(v[2], 3.0);
+}
+
+TEST(ClassVector, ShrinkEmptyVector) {
+    Vector<double> v;
+
+    EXPECT_NO_THROW(v.shrink_to_fit());
+
+    size_t actual_bytes = v.get_capacity() * sizeof(double);
+
+    EXPECT_EQ(v.get_size(), 0);
+    EXPECT_TRUE(actual_bytes > 0);
+}
+
+TEST(ClassVector, ShrinkShiftedRingBuffer) {
+    Vector<double> v;
+
+    v.push_back(1.0);
+    v.push_back(2.0);
+    v.push_front(3.0);
+    v.pop_back();
+
+    EXPECT_TRUE(v.get_front() != 0);
+    size_t old_size = v.get_size();
+
+    v.shrink_to_fit();
+
+    size_t actual_bytes = v.get_capacity() * sizeof(double);
+    size_t expected_bytes = old_size * sizeof(double);
+
+    EXPECT_EQ(actual_bytes, expected_bytes);
+    EXPECT_EQ(v.get_front_idx(), 0);
+    EXPECT_EQ(v.get_back_idx(), v.get_size() - 1);
+
+    EXPECT_DOUBLE_EQ(v[0], 3.0);
+    EXPECT_DOUBLE_EQ(v[1], 1.0);
+}
+

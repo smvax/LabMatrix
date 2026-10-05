@@ -42,9 +42,25 @@ public:
 			throw std::logic_error("ERROR: Vector is empty! Can't get front");
 		}
 	}
+	inline vector_type get_front_idx() const {			// первого элемента (возвр. индекс) ƒЋя GTESTS
+		if (_mem._size != 0) {
+			return _front;
+		}
+		else {
+			throw std::logic_error("ERROR: Vector is empty! Can't get front");
+		}
+	}
 	inline vector_type get_back() const {			// последнего элемента (возвр. копию)
 		if (_mem._size != 0) {
 			return (_mem._data)[_back];
+		}
+		else {
+			throw std::logic_error("ERROR: Vector is empty! Can't get back");
+		}
+	}
+	inline vector_type get_back_idx() const {			// последнего элемента (возвр. индес) ƒЋя GTESTS
+		if (_mem._size != 0) {
+			return _back;
 		}
 		else {
 			throw std::logic_error("ERROR: Vector is empty! Can't get back");
@@ -90,6 +106,7 @@ public:
     void pop_back_many(size_t);						// нескольких из конца
     void erase(size_t);                             // 1 элемента по позиции
     void erase_many(size_t, size_t);				// нескольких по позиции
+	void shrink_to_fit();							// неиспользуемой пам€ти
 
 	// перегрузки операторов
     Vector<vector_type>& operator=(const Vector<vector_type>&) noexcept;      // присваивани€

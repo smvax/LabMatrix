@@ -1,6 +1,6 @@
 #include "vector.h"
 
-//конструкторы
+// конструкторы
 template<typename vector_type>
 Vector<vector_type>::Vector(size_t size) {
 	MemData<vector_type> temp(size);
@@ -52,8 +52,8 @@ Vector<vector_type>::Vector(Vector<vector_type>&& other) noexcept {
 	other._back = 0;
 }
 
-//публичные методы
-//вставок
+// публичные методы
+// вставок
 template<typename vector_type>
 void Vector<vector_type>::push_front(vector_type element) noexcept {
 	_mem._size++;
@@ -69,7 +69,7 @@ void Vector<vector_type>::push_front(vector_type element) noexcept {
 }
 template<typename vector_type>
 void Vector<vector_type>::push_front_many(vector_type* elements, size_t size) noexcept {
-	for (int i = size - 1; i >= 0; i--) { //идем с конца тк кладем в начало
+	for (int i = size - 1; i >= 0; i--) { // идем с конца тк кладем в начало
 		push_front(elements[i]);
 	}
 }
@@ -88,7 +88,7 @@ void Vector<vector_type>::push_back(vector_type element) noexcept {
 }
 template<typename vector_type>
 void Vector<vector_type>::push_back_many(vector_type* elements, size_t size) noexcept {
-	for (int i = 0; i < size; i++) { //идем с начала тк кладем в конец
+	for (int i = 0; i < size; i++) { // идем с начала тк кладем в конец
 		push_back(elements[i]);
 	}
 }
@@ -131,7 +131,7 @@ void Vector<vector_type>::insert_many(vector_type* elements, size_t size, size_t
 	}
 }
 
-//удалений
+// удалений
 template<typename vector_type>
 void Vector<vector_type>::pop_front() {
 	if (_mem._size == 0) {
@@ -263,8 +263,25 @@ void Vector<vector_type>::erase_many(size_t i, size_t count) {
 		erase(i);
 	}
 }
+template<typename vector_type>
+void Vector<vector_type>::shrink_to_fit() {
+	if (is_empty() || is_full()) {
+		return;
+	}
+	vector_type* temp = new vector_type[_mem._size];
+	for (size_t i = 0; i < _mem._size; i++) {
+		temp[i] = _mem._data[(_front + i) % _mem._capacity];
+	}
+	if (_mem._data) {
+		delete[] _mem._data;
+	}
+	_mem._data = temp;
+	_mem._capacity = _mem._size;
+	_front = 0;
+	_back = _mem._size - 1;
+}
 
-//перегрузки операторов
+// перегрузки операторов
 template<typename vector_type>
 Vector<vector_type>& Vector<vector_type>::operator=(const Vector<vector_type>& other) noexcept {
 	if (this != &other) {
@@ -294,8 +311,8 @@ vector_type& Vector<vector_type>::operator[](size_t i) noexcept {
 		return _mem._data[(*this).get_mem_index(i)];
 }
 
-//дружественные функции
-//сортировки и перемешивания
+// дружественные функции
+// сортировки и перемешивания
 template<typename vector_type>
 void quick_sort(Vector<vector_type>& vector) {
 	quick_sort(vector._mem);
@@ -304,7 +321,7 @@ template<typename vector_type>
 void shuffle(Vector<vector_type>& vector) {
 	shuffle(vector._mem);
 }
-//перегрузки ввода-вывода
+// перегрузки ввода-вывода
 template <typename vector_type>
 std::ostream& operator<< (std::ostream& out, const Vector<vector_type>& vector) {	// вывода
 	out << "{ ";
@@ -330,7 +347,7 @@ std::istream& operator>> (std::istream& in, Vector<vector_type>& vector) {			// 
 	return in;
 };
 
-//инстанцирование шаблона (генерация объектного файла под определенный тд):
+// инстанцирование шаблона (генерация объектного файла под определенный тд):
 template class Vector<double>;
 template std::ostream& operator<< (std::ostream& out, const Vector<double>& v1);
 template std::istream& operator>> (std::istream& in, Vector<double>& v1);
