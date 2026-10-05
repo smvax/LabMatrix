@@ -1,6 +1,6 @@
 #include "vector.h"
 
-//конструкторы
+// ГЄГ®Г­Г±ГІГ°ГіГЄГІГ®Г°Г»
 template<typename vector_type>
 Vector<vector_type>::Vector(size_t size) {
 	MemData<vector_type> temp(size);
@@ -52,8 +52,8 @@ Vector<vector_type>::Vector(Vector<vector_type>&& other) noexcept {
 	other._back = 0;
 }
 
-//публичные методы
-//вставок
+// ГЇГіГЎГ«ГЁГ·Г­Г»ГҐ Г¬ГҐГІГ®Г¤Г»
+// ГўГ±ГІГ ГўГ®ГЄ
 template<typename vector_type>
 void Vector<vector_type>::push_front(vector_type element) noexcept {
 	_mem._size++;
@@ -69,7 +69,7 @@ void Vector<vector_type>::push_front(vector_type element) noexcept {
 }
 template<typename vector_type>
 void Vector<vector_type>::push_front_many(vector_type* elements, size_t size) noexcept {
-	for (int i = size - 1; i >= 0; i--) { //идем с конца тк кладем в начало
+	for (int i = size - 1; i >= 0; i--) { // ГЁГ¤ГҐГ¬ Г± ГЄГ®Г­Г¶Г  ГІГЄ ГЄГ«Г Г¤ГҐГ¬ Гў Г­Г Г·Г Г«Г®
 		push_front(elements[i]);
 	}
 }
@@ -88,7 +88,7 @@ void Vector<vector_type>::push_back(vector_type element) noexcept {
 }
 template<typename vector_type>
 void Vector<vector_type>::push_back_many(vector_type* elements, size_t size) noexcept {
-	for (int i = 0; i < size; i++) { //идем с начала тк кладем в конец
+	for (int i = 0; i < size; i++) { // ГЁГ¤ГҐГ¬ Г± Г­Г Г·Г Г«Г  ГІГЄ ГЄГ«Г Г¤ГҐГ¬ Гў ГЄГ®Г­ГҐГ¶
 		push_back(elements[i]);
 	}
 }
@@ -131,7 +131,7 @@ void Vector<vector_type>::insert_many(vector_type* elements, size_t size, size_t
 	}
 }
 
-//удалений
+//ГіГ¤Г Г«ГҐГ­ГЁГ©
 template<typename vector_type>
 void Vector<vector_type>::pop_front() {
 	if (_mem._size == 0) {
@@ -264,7 +264,7 @@ void Vector<vector_type>::erase_many(size_t i, size_t count) {
 	}
 }
 
-//перегрузки операторов
+// ГЇГҐГ°ГҐГЈГ°ГіГ§ГЄГЁ Г®ГЇГҐГ°Г ГІГ®Г°Г®Гў
 template<typename vector_type>
 Vector<vector_type>& Vector<vector_type>::operator=(const Vector<vector_type>& other) noexcept {
 	if (this != &other) {
@@ -294,8 +294,8 @@ vector_type& Vector<vector_type>::operator[](size_t i) noexcept {
 		return _mem._data[(*this).get_mem_index(i)];
 }
 
-//дружественные функции
-//сортировки и перемешивания
+// Г¤Г°ГіГ¦ГҐГ±ГІГўГҐГ­Г­Г»ГҐ ГґГіГ­ГЄГ¶ГЁГЁ
+// Г±Г®Г°ГІГЁГ°Г®ГўГЄГЁ ГЁ ГЇГҐГ°ГҐГ¬ГҐГёГЁГўГ Г­ГЁГї
 template<typename vector_type>
 void quick_sort(Vector<vector_type>& vector) {
 	quick_sort(vector._mem);
@@ -304,9 +304,9 @@ template<typename vector_type>
 void shuffle(Vector<vector_type>& vector) {
 	shuffle(vector._mem);
 }
-//перегрузки ввода-вывода
+// ГЇГҐГ°ГҐГЈГ°ГіГ§ГЄГЁ ГўГўГ®Г¤Г -ГўГ»ГўГ®Г¤Г 
 template <typename vector_type>
-std::ostream& operator<< (std::ostream& out, const Vector<vector_type>& vector) {	// вывода
+std::ostream& operator<< (std::ostream& out, const Vector<vector_type>& vector) {	// ГўГ»ГўГ®Г¤Г 
 	out << "{ ";
 	size_t size = vector.get_size();
 	if (size != 0) {
@@ -319,7 +319,7 @@ std::ostream& operator<< (std::ostream& out, const Vector<vector_type>& vector) 
 	return out;
 };
 template <typename vector_type>
-std::istream& operator>> (std::istream& in, Vector<vector_type>& vector) {			// ввода
+std::istream& operator>> (std::istream& in, Vector<vector_type>& vector) {			// ГўГўГ®Г¤Г 
 	Vector<vector_type> temp;
 	vector_type element;
 	in >> element;
@@ -330,7 +330,7 @@ std::istream& operator>> (std::istream& in, Vector<vector_type>& vector) {			// 
 	return in;
 };
 
-//инстанцирование шаблона (генерация объектного файла под определенный тд):
+// ГЁГ­Г±ГІГ Г­Г¶ГЁГ°Г®ГўГ Г­ГЁГҐ ГёГ ГЎГ«Г®Г­Г  (ГЈГҐГ­ГҐГ°Г Г¶ГЁГї Г®ГЎГєГҐГЄГІГ­Г®ГЈГ® ГґГ Г©Г«Г  ГЇГ®Г¤ Г®ГЇГ°ГҐГ¤ГҐГ«ГҐГ­Г­Г»Г© ГІГ¤):
 template class Vector<double>;
 template std::ostream& operator<< (std::ostream& out, const Vector<double>& v1);
 template std::istream& operator>> (std::istream& in, Vector<double>& v1);
