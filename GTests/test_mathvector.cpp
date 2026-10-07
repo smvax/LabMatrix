@@ -1,5 +1,4 @@
 #include "pch.h"
-
 #include "mathvector.h"
 
 TEST(ClassMathVector, can_create_with_init_constructor) {

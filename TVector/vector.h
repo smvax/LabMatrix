@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include<cstdlib>
+#include <cstdlib>
 #include "memdata.h"
 
 template<typename vector_type>

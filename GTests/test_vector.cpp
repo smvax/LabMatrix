@@ -1,5 +1,4 @@
 #include "pch.h"
-
 #include "vector.h"
 
 TEST(ClassVector, can_create_with_default_constructor) {

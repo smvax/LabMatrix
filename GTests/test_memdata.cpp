@@ -1,5 +1,4 @@
 #include "pch.h"
-
 #include "memdata.h"
 
 TEST(FunctionsForMemData, can_calculate_capacity) {

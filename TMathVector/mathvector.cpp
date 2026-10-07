@@ -123,6 +123,15 @@ std::istream& operator>>(std::istream& in, MathVector<vector_type>& mv) {
 	return in;
 }
 
+template<typename vector_type>
+const vector_type MathVector<vector_type>::operator[](size_t i) const noexcept {
+	return this->Vector<vector_type>::operator[](i - 1);
+}
+template<typename vector_type>
+vector_type& MathVector<vector_type>::operator[](size_t i) noexcept {
+	return this->Vector<vector_type>::operator[](i - 1);
+}
+
 // инстанцирование шаблона (генерация объектного файла под определенный тд):
 template class MathVector<double>;
 template std::ostream& operator<< (std::ostream& out, const MathVector<double>& mv);
