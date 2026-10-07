@@ -57,7 +57,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>C:\Users\Maxim\LabMatrix\TMemData;C:\Users\Maxim\LabMatrix\TVector;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Maxim\LabMatrix\TMemData;C:\Users\Maxim\LabMatrix\TVector;C:\Users\Maxim\LabMatrix\TMathVector;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -106,13 +106,17 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="test_tmemdata.cpp" />
-    <ClCompile Include="test_tvector.cpp" />
+    <ClCompile Include="test_mathvector.cpp" />
+    <ClCompile Include="test_memdata.cpp" />
+    <ClCompile Include="test_vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TMathVector\TMathVector.vcxproj">
+      <Project>{b8efa821-6682-4b76-83a5-40714b8cdaff}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\TMemData\TMemData.vcxproj">
       <Project>{317aef42-aba6-4b1b-83d9-0789ccdb6a1a}</Project>
     </ProjectReference>

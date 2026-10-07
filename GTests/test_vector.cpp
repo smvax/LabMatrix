@@ -795,10 +795,11 @@ TEST(ClassVector, ShrinkShiftedRingBuffer) {
 
     v.push_back(1.0);
     v.push_back(2.0);
-    v.push_front(3.0);
+    v.push_back(3.0);
+    v.push_front(4.0);
     v.pop_back();
 
-    EXPECT_TRUE(v.get_front() != 0);
+    EXPECT_TRUE(v.get_front_idx() != 0);
     size_t old_size = v.get_size();
 
     v.shrink_to_fit();
@@ -810,7 +811,8 @@ TEST(ClassVector, ShrinkShiftedRingBuffer) {
     EXPECT_EQ(v.get_front_idx(), 0);
     EXPECT_EQ(v.get_back_idx(), v.get_size() - 1);
 
-    EXPECT_DOUBLE_EQ(v[0], 3.0);
+    EXPECT_DOUBLE_EQ(v[0], 4.0);
     EXPECT_DOUBLE_EQ(v[1], 1.0);
+    EXPECT_DOUBLE_EQ(v[2], 2.0);
 }
 

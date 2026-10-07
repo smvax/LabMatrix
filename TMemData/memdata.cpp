@@ -23,9 +23,9 @@ MemData<vector_type>::MemData(std::initializer_list<vector_type> list) {	//по сп
 }
 template <typename vector_type>
 MemData<vector_type>::MemData(const vector_type* array, size_t size) {		//инициализации
-	if (array == nullptr) {
-		throw std::invalid_argument("ERROR: Array pointer is a nullptr!");
-	}
+	//if (array == nullptr) {
+	//	throw std::invalid_argument("ERROR: Array pointer is a nullptr!");
+	//}
 	_size = size;
 	_data = nullptr;
 	set_memory(_size);

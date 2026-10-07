@@ -26,7 +26,7 @@ Vector<vector_type>::Vector(std::initializer_list<vector_type> list) {
 	}
 }
 template<typename vector_type>
-Vector<vector_type>::Vector(vector_type* array, size_t size) {
+Vector<vector_type>::Vector(const vector_type* array, size_t size) {
 	MemData<vector_type> temp(array, size);
 	_mem = (std::move(temp));
 	_front = 0;
@@ -276,9 +276,9 @@ void Vector<vector_type>::shrink_to_fit() {
 		delete[] _mem._data;
 	}
 	_mem._data = temp;
-	_mem._capacity = _mem._size;
 	_front = 0;
 	_back = _mem._size - 1;
+	_mem._capacity = _mem._size;
 }
 
 // перегрузки операторов

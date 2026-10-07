@@ -11,85 +11,31 @@ class Vector {
 
 public:
 	// конструкторы
-    Vector(size_t size = 0);					// конструктор по размеру + по умолчанию
-    Vector(std::initializer_list<vector_type>); // конструктор по списку инициализации
-    Vector(vector_type*, size_t);               // конструктор инициализации
-    Vector(const Vector<vector_type>&);         // конструктор копирования
-    Vector(Vector<vector_type>&&) noexcept;     // конструктор с move-семантикой
+    Vector(size_t size = 0);						// конструктор по размеру + по умолчанию
+    Vector(std::initializer_list<vector_type>);		// конструктор по списку инициализации
+    Vector(const vector_type*, size_t);				// конструктор инициализации
+    Vector(const Vector<vector_type>&);				// конструктор копирования
+    Vector(Vector<vector_type>&&) noexcept;			// конструктор с move-семантикой
 	// деструктор
     ~Vector() = default; //напишется компилятором
 
 	// публичные методы проверок
-	inline bool is_empty() const noexcept {			// на пустоту
-		return _mem.is_empty();
-	}
-	inline bool is_full() const noexcept {			// на переполнение
-		return _mem.is_full();
-	}
+	inline bool is_empty() const noexcept;			// на пустоту
+	inline bool is_full() const noexcept;			// на переполнение
 
 	// геттеры
-	inline size_t get_size() const noexcept {		// размера
-		return _mem._size;
-	}
-	inline size_t get_capacity() const noexcept {	// вместимости
-		return _mem._capacity;
-	}
-	inline vector_type get_front() const {			// первого элемента (возвр. копию)
-		if (_mem._size != 0) {
-			return (_mem._data)[_front];
-		}
-		else {
-			throw std::logic_error("ERROR: Vector is empty! Can't get front");
-		}
-	}
-	inline vector_type get_front_idx() const {			// первого элемента (возвр. индекс) ДЛЯ GTESTS
-		if (_mem._size != 0) {
-			return _front;
-		}
-		else {
-			throw std::logic_error("ERROR: Vector is empty! Can't get front");
-		}
-	}
-	inline vector_type get_back() const {			// последнего элемента (возвр. копию)
-		if (_mem._size != 0) {
-			return (_mem._data)[_back];
-		}
-		else {
-			throw std::logic_error("ERROR: Vector is empty! Can't get back");
-		}
-	}
-	inline vector_type get_back_idx() const {			// последнего элемента (возвр. индес) ДЛЯ GTESTS
-		if (_mem._size != 0) {
-			return _back;
-		}
-		else {
-			throw std::logic_error("ERROR: Vector is empty! Can't get back");
-		}
-	}
-	inline MemData<vector_type> get_mem_copy() const noexcept {            // копии мемдаты (для тестов)
-		return _mem;
-	}
-	inline const MemData<vector_type>& get_mem_original() const noexcept { // оригинала мемдаты (для тестов на move)
-		return _mem;
-	}
+	inline size_t get_size() const noexcept;			// размера
+	inline size_t get_capacity() const noexcept;		// вместимости
+	inline vector_type get_front() const;				// первого элемента (возвр. копию)
+	inline vector_type get_front_idx() const;			// первого элемента (возвр. индекс) ДЛЯ GTESTS
+	inline vector_type get_back() const;				// последнего элемента (возвр. копию)
+	inline vector_type get_back_idx() const;			// последнего элемента (возвр. индес) ДЛЯ GTESTS
+	inline MemData<vector_type> get_mem_copy() const noexcept;            // копии мемдаты (для тестов)
+	inline const MemData<vector_type>& get_mem_original() const noexcept; // оригинала мемдаты (для тестов на move)
 
 	// сеттеры
-	inline vector_type& front_ref() {				// первого элемента (возвр. ссылку)
-		if (_mem._size != 0) {
-			return (_mem._data)[_front];
-		}
-		else {
-			throw std::logic_error("ERROR: Vector is empty! Can't set front");
-		}
-	}
-	inline vector_type& back_ref() {				// последнего элемента (возвр. ссылку)
-		if (_mem._size != 0) {
-			return (_mem._data)[_back];
-		}
-		else {
-			throw std::logic_error("ERROR: Vector is empty! Can't set back");
-		}
-	}
+	inline vector_type& front_ref();						// первого элемента (возвр. ссылку)
+	inline vector_type& back_ref();							// последнего элемента (возвр. ссылку)
 
 	// публичные методы вставок
     void push_front(vector_type) noexcept;					// 1 элемента в начало
@@ -111,8 +57,8 @@ public:
 	// перегрузки операторов
     Vector<vector_type>& operator=(const Vector<vector_type>&) noexcept;      // присваивания
     Vector<vector_type>& operator=(Vector<vector_type>&&) noexcept;           // присваивания с move-семантикой
-	vector_type operator[](size_t) const noexcept;       // обращения по индексу (не изм., возвр. копию)
-    vector_type& operator[](size_t) noexcept;            // обращения по индексу (изм., возвр. ссылку)
+	vector_type operator[](size_t) const noexcept;			// обращения по индексу (не изм., возвр. копию)
+    vector_type& operator[](size_t) noexcept;				// обращения по индексу (изм., возвр. ссылку)
 
 	// дружественные функции
 	// перегрузки ввода-вывода
@@ -124,11 +70,93 @@ public:
 	template <typename vector_type>
     friend void quick_sort(Vector<vector_type>&);		// сортировки (Хоара)
 	template <typename vector_type>
-	friend void shuffle(Vector<vector_type>&);	// перемешивания (Фишер-Йетса)
+	friend void shuffle(Vector<vector_type>&);			// перемешивания (Фишер-Йетса)
 
 private:
 	// служебный метод получения (геттер) физического индекса по относительному
-	inline size_t get_mem_index(size_t i) const {
-		return ((i + _front) % _mem._capacity);
-	}
+	inline size_t get_mem_index(size_t i) const;
 };
+
+// реализация инлайновых методов в хедере, но вне класса
+template<typename vector_type>
+inline bool Vector<vector_type>::is_empty() const noexcept {
+	return _mem.is_empty();
+}
+template<typename vector_type>
+inline bool Vector<vector_type>::is_full() const noexcept {
+	return _mem.is_full();
+}
+template<typename vector_type>
+inline size_t  Vector<vector_type>::get_size() const noexcept {
+	return _mem._size;
+}
+template<typename vector_type>
+inline size_t  Vector<vector_type>::get_capacity() const noexcept {
+	return _mem._capacity;
+}
+template<typename vector_type>
+inline vector_type  Vector<vector_type>::get_front() const {
+	if (_mem._size != 0) {
+		return (_mem._data)[_front];
+	}
+	else {
+		throw std::logic_error("ERROR: Vector is empty! Can't get front");
+	}
+}
+template<typename vector_type>
+inline vector_type  Vector<vector_type>::get_front_idx() const {
+	if (_mem._size != 0) {
+		return _front;
+	}
+	else {
+		throw std::logic_error("ERROR: Vector is empty! Can't get front");
+	}
+}
+template<typename vector_type>
+inline vector_type Vector<vector_type>::get_back() const {
+	if (_mem._size != 0) {
+		return (_mem._data)[_back];
+	}
+	else {
+		throw std::logic_error("ERROR: Vector is empty! Can't get back");
+	}
+}
+template<typename vector_type>
+inline vector_type Vector<vector_type>::get_back_idx() const {
+	if (_mem._size != 0) {
+		return _back;
+	}
+	else {
+		throw std::logic_error("ERROR: Vector is empty! Can't get back");
+	}
+}
+template<typename vector_type>
+inline MemData<vector_type> Vector<vector_type>::get_mem_copy() const noexcept {
+	return _mem;
+}
+template<typename vector_type>
+inline const MemData<vector_type>& Vector<vector_type>::get_mem_original() const noexcept {
+	return _mem;
+}
+template<typename vector_type>
+inline vector_type& Vector<vector_type>::front_ref() {
+	if (_mem._size != 0) {
+		return (_mem._data)[_front];
+	}
+	else {
+		throw std::logic_error("ERROR: Vector is empty! Can't set front");
+	}
+}
+template<typename vector_type>
+inline vector_type& Vector<vector_type>::back_ref() {
+	if (_mem._size != 0) {
+		return (_mem._data)[_back];
+	}
+	else {
+		throw std::logic_error("ERROR: Vector is empty! Can't set back");
+	}
+}
+template<typename vector_type>
+inline size_t Vector<vector_type>::get_mem_index(size_t i) const {
+	return ((i + _front) % _mem._capacity);
+}
