@@ -1,40 +1,40 @@
 #pragma once
 #include <iostream>
-#include<cstdlib>
+#include <cstdlib>
 #include "memdata.h"
 
 template<typename vector_type>
 class Vector {
-    MemData<vector_type> _mem;	// хранилище данных + размер  + вместимость
-    size_t _front;				// индекс первого элемента
-    size_t _back;				// индекс последнего элемента
+    MemData<vector_type> _mem;	// ГµГ°Г Г­ГЁГ«ГЁГ№ГҐ Г¤Г Г­Г­Г»Гµ + Г°Г Г§Г¬ГҐГ°  + ГўГ¬ГҐГ±ГІГЁГ¬Г®Г±ГІГј
+    size_t _front;				// ГЁГ­Г¤ГҐГЄГ± ГЇГҐГ°ГўГ®ГЈГ® ГЅГ«ГҐГ¬ГҐГ­ГІГ 
+    size_t _back;				// ГЁГ­Г¤ГҐГЄГ± ГЇГ®Г±Г«ГҐГ¤Г­ГҐГЈГ® ГЅГ«ГҐГ¬ГҐГ­ГІГ 
 
 public:
-	// конструкторы
-    Vector(size_t size = 0);					// конструктор по размеру + по умолчанию
-    Vector(std::initializer_list<vector_type>); // конструктор по списку инициализации
-    Vector(vector_type*, size_t);               // конструктор инициализации
-    Vector(const Vector<vector_type>&);         // конструктор копирования
-    Vector(Vector<vector_type>&&) noexcept;     // конструктор с move-семантикой
-	// деструктор
-    ~Vector() = default; //напишется компилятором
+	// ГЄГ®Г­Г±ГІГ°ГіГЄГІГ®Г°Г»
+    Vector(size_t size = 0);					// ГЄГ®Г­Г±ГІГ°ГіГЄГІГ®Г° ГЇГ® Г°Г Г§Г¬ГҐГ°Гі + ГЇГ® ГіГ¬Г®Г«Г·Г Г­ГЁГѕ
+    Vector(std::initializer_list<vector_type>); // ГЄГ®Г­Г±ГІГ°ГіГЄГІГ®Г° ГЇГ® Г±ГЇГЁГ±ГЄГі ГЁГ­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГЁ
+    Vector(vector_type*, size_t);               // ГЄГ®Г­Г±ГІГ°ГіГЄГІГ®Г° ГЁГ­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГЁ
+    Vector(const Vector<vector_type>&);         // ГЄГ®Г­Г±ГІГ°ГіГЄГІГ®Г° ГЄГ®ГЇГЁГ°Г®ГўГ Г­ГЁГї
+    Vector(Vector<vector_type>&&) noexcept;     // ГЄГ®Г­Г±ГІГ°ГіГЄГІГ®Г° Г± move-Г±ГҐГ¬Г Г­ГІГЁГЄГ®Г©
+	// Г¤ГҐГ±ГІГ°ГіГЄГІГ®Г°
+    ~Vector() = default; //Г­Г ГЇГЁГёГҐГІГ±Гї ГЄГ®Г¬ГЇГЁГ«ГїГІГ®Г°Г®Г¬
 
-	// публичные методы проверок
-	inline bool is_empty() const noexcept {			// на пустоту
+	// ГЇГіГЎГ«ГЁГ·Г­Г»ГҐ Г¬ГҐГІГ®Г¤Г» ГЇГ°Г®ГўГҐГ°Г®ГЄ
+	inline bool is_empty() const noexcept {			// Г­Г  ГЇГіГ±ГІГ®ГІГі
 		return _mem.is_empty();
 	}
-	inline bool is_full() const noexcept {			// на переполнение
+	inline bool is_full() const noexcept {			// Г­Г  ГЇГҐГ°ГҐГЇГ®Г«Г­ГҐГ­ГЁГҐ
 		return _mem.is_full();
 	}
 
-	// геттеры
-	inline size_t get_size() const noexcept {		// размера
+	// ГЈГҐГІГІГҐГ°Г»
+	inline size_t get_size() const noexcept {		// Г°Г Г§Г¬ГҐГ°Г 
 		return _mem._size;
 	}
-	inline size_t get_capacity() const noexcept {	// вместимости
+	inline size_t get_capacity() const noexcept {	// ГўГ¬ГҐГ±ГІГЁГ¬Г®Г±ГІГЁ
 		return _mem._capacity;
 	}
-	inline vector_type get_front() const {			// первого элемента (возвр. копию)
+	inline vector_type get_front() const {			// ГЇГҐГ°ГўГ®ГЈГ® ГЅГ«ГҐГ¬ГҐГ­ГІГ  (ГўГ®Г§ГўГ°. ГЄГ®ГЇГЁГѕ)
 		if (_mem._size != 0) {
 			return (_mem._data)[_front];
 		}
@@ -42,7 +42,7 @@ public:
 			throw std::logic_error("ERROR: Vector is empty! Can't get front");
 		}
 	}
-	inline vector_type get_back() const {			// последнего элемента (возвр. копию)
+	inline vector_type get_back() const {			// ГЇГ®Г±Г«ГҐГ¤Г­ГҐГЈГ® ГЅГ«ГҐГ¬ГҐГ­ГІГ  (ГўГ®Г§ГўГ°. ГЄГ®ГЇГЁГѕ)
 		if (_mem._size != 0) {
 			return (_mem._data)[_back];
 		}
@@ -50,15 +50,15 @@ public:
 			throw std::logic_error("ERROR: Vector is empty! Can't get back");
 		}
 	}
-	inline MemData<vector_type> get_mem_copy() const noexcept {            // копии мемдаты (для тестов)
+	inline MemData<vector_type> get_mem_copy() const noexcept {            // ГЄГ®ГЇГЁГЁ Г¬ГҐГ¬Г¤Г ГІГ» (Г¤Г«Гї ГІГҐГ±ГІГ®Гў)
 		return _mem;
 	}
-	inline const MemData<vector_type>& get_mem_original() const noexcept { // оригинала мемдаты (для тестов на move)
+	inline const MemData<vector_type>& get_mem_original() const noexcept { // Г®Г°ГЁГЈГЁГ­Г Г«Г  Г¬ГҐГ¬Г¤Г ГІГ» (Г¤Г«Гї ГІГҐГ±ГІГ®Гў Г­Г  move)
 		return _mem;
 	}
 
-	// сеттеры
-	inline vector_type& front_ref() {				// первого элемента (возвр. ссылку)
+	// Г±ГҐГІГІГҐГ°Г»
+	inline vector_type& front_ref() {				// ГЇГҐГ°ГўГ®ГЈГ® ГЅГ«ГҐГ¬ГҐГ­ГІГ  (ГўГ®Г§ГўГ°. Г±Г±Г»Г«ГЄГі)
 		if (_mem._size != 0) {
 			return (_mem._data)[_front];
 		}
@@ -66,7 +66,7 @@ public:
 			throw std::logic_error("ERROR: Vector is empty! Can't set front");
 		}
 	}
-	inline vector_type& back_ref() {				// последнего элемента (возвр. ссылку)
+	inline vector_type& back_ref() {				// ГЇГ®Г±Г«ГҐГ¤Г­ГҐГЈГ® ГЅГ«ГҐГ¬ГҐГ­ГІГ  (ГўГ®Г§ГўГ°. Г±Г±Г»Г«ГЄГі)
 		if (_mem._size != 0) {
 			return (_mem._data)[_back];
 		}
@@ -75,42 +75,42 @@ public:
 		}
 	}
 
-	// публичные методы вставок
-    void push_front(vector_type) noexcept;					// 1 элемента в начало
-    void push_front_many(vector_type*, size_t) noexcept;	// нескольких в начало
-    void push_back(vector_type) noexcept;					// 1 элемента в конец
-    void push_back_many(vector_type*, size_t) noexcept;		// нескольких в конец
-    void insert(vector_type, size_t);						// 1 элемента по позиции
-    void insert_many(vector_type*, size_t, size_t);			// нескольких по позиции
+	// ГЇГіГЎГ«ГЁГ·Г­Г»ГҐ Г¬ГҐГІГ®Г¤Г» ГўГ±ГІГ ГўГ®ГЄ
+    void push_front(vector_type) noexcept;					// 1 ГЅГ«ГҐГ¬ГҐГ­ГІГ  Гў Г­Г Г·Г Г«Г®
+    void push_front_many(vector_type*, size_t) noexcept;	// Г­ГҐГ±ГЄГ®Г«ГјГЄГЁГµ Гў Г­Г Г·Г Г«Г®
+    void push_back(vector_type) noexcept;					// 1 ГЅГ«ГҐГ¬ГҐГ­ГІГ  Гў ГЄГ®Г­ГҐГ¶
+    void push_back_many(vector_type*, size_t) noexcept;		// Г­ГҐГ±ГЄГ®Г«ГјГЄГЁГµ Гў ГЄГ®Г­ГҐГ¶
+    void insert(vector_type, size_t);						// 1 ГЅГ«ГҐГ¬ГҐГ­ГІГ  ГЇГ® ГЇГ®Г§ГЁГ¶ГЁГЁ
+    void insert_many(vector_type*, size_t, size_t);			// Г­ГҐГ±ГЄГ®Г«ГјГЄГЁГµ ГЇГ® ГЇГ®Г§ГЁГ¶ГЁГЁ
 
-	// удалений
-    void pop_front();                               // 1 элемента из начала
-    void pop_front_many(size_t);					// нескольких из начала
-    void pop_back();                                // 1 элемента из конца
-    void pop_back_many(size_t);						// нескольких из конца
-    void erase(size_t);                             // 1 элемента по позиции
-    void erase_many(size_t, size_t);				// нескольких по позиции
+	// ГіГ¤Г Г«ГҐГ­ГЁГ©
+    void pop_front();                               // 1 ГЅГ«ГҐГ¬ГҐГ­ГІГ  ГЁГ§ Г­Г Г·Г Г«Г 
+    void pop_front_many(size_t);					// Г­ГҐГ±ГЄГ®Г«ГјГЄГЁГµ ГЁГ§ Г­Г Г·Г Г«Г 
+    void pop_back();                                // 1 ГЅГ«ГҐГ¬ГҐГ­ГІГ  ГЁГ§ ГЄГ®Г­Г¶Г 
+    void pop_back_many(size_t);						// Г­ГҐГ±ГЄГ®Г«ГјГЄГЁГµ ГЁГ§ ГЄГ®Г­Г¶Г 
+    void erase(size_t);                             // 1 ГЅГ«ГҐГ¬ГҐГ­ГІГ  ГЇГ® ГЇГ®Г§ГЁГ¶ГЁГЁ
+    void erase_many(size_t, size_t);				// Г­ГҐГ±ГЄГ®Г«ГјГЄГЁГµ ГЇГ® ГЇГ®Г§ГЁГ¶ГЁГЁ
 
-	// перегрузки операторов
-    Vector<vector_type>& operator=(const Vector<vector_type>&) noexcept;      // присваивания
-    Vector<vector_type>& operator=(Vector<vector_type>&&) noexcept;           // присваивания с move-семантикой
-	vector_type operator[](size_t) const noexcept;       // обращения по индексу (не изм., возвр. копию)
-    vector_type& operator[](size_t) noexcept;            // обращения по индексу (изм., возвр. ссылку)
+	// ГЇГҐГ°ГҐГЈГ°ГіГ§ГЄГЁ Г®ГЇГҐГ°Г ГІГ®Г°Г®Гў
+    Vector<vector_type>& operator=(const Vector<vector_type>&) noexcept;      // ГЇГ°ГЁГ±ГўГ ГЁГўГ Г­ГЁГї
+    Vector<vector_type>& operator=(Vector<vector_type>&&) noexcept;           // ГЇГ°ГЁГ±ГўГ ГЁГўГ Г­ГЁГї Г± move-Г±ГҐГ¬Г Г­ГІГЁГЄГ®Г©
+	vector_type operator[](size_t) const noexcept;       // Г®ГЎГ°Г Г№ГҐГ­ГЁГї ГЇГ® ГЁГ­Г¤ГҐГЄГ±Гі (Г­ГҐ ГЁГ§Г¬., ГўГ®Г§ГўГ°. ГЄГ®ГЇГЁГѕ)
+    vector_type& operator[](size_t) noexcept;            // Г®ГЎГ°Г Г№ГҐГ­ГЁГї ГЇГ® ГЁГ­Г¤ГҐГЄГ±Гі (ГЁГ§Г¬., ГўГ®Г§ГўГ°. Г±Г±Г»Г«ГЄГі)
 
-	// дружественные функции
-	// перегрузки ввода-вывода
+	// Г¤Г°ГіГ¦ГҐГ±ГІГўГҐГ­Г­Г»ГҐ ГґГіГ­ГЄГ¶ГЁГЁ
+	// ГЇГҐГ°ГҐГЈГ°ГіГ§ГЄГЁ ГўГўГ®Г¤Г -ГўГ»ГўГ®Г¤Г 
 	template <typename vector_type>
-	friend std::ostream& operator<< (std::ostream&, const Vector<vector_type>&);	// вывода
+	friend std::ostream& operator<< (std::ostream&, const Vector<vector_type>&);	// ГўГ»ГўГ®Г¤Г 
 	template <typename vector_type>
-	friend std::istream& operator>> (std::istream&, Vector<vector_type>&);			// ввода
-	// сортировки и перемешивания
+	friend std::istream& operator>> (std::istream&, Vector<vector_type>&);			// ГўГўГ®Г¤Г 
+	// Г±Г®Г°ГІГЁГ°Г®ГўГЄГЁ ГЁ ГЇГҐГ°ГҐГ¬ГҐГёГЁГўГ Г­ГЁГї
 	template <typename vector_type>
-    friend void quick_sort(Vector<vector_type>&);		// сортировки (Хоара)
+    friend void quick_sort(Vector<vector_type>&);		// Г±Г®Г°ГІГЁГ°Г®ГўГЄГЁ (Г•Г®Г Г°Г )
 	template <typename vector_type>
-	friend void shuffle(Vector<vector_type>&);	// перемешивания (Фишер-Йетса)
+	friend void shuffle(Vector<vector_type>&);	// ГЇГҐГ°ГҐГ¬ГҐГёГЁГўГ Г­ГЁГї (Г”ГЁГёГҐГ°-Г‰ГҐГІГ±Г )
 
 private:
-	// служебный метод получения (геттер) физического индекса по относительному
+	// Г±Г«ГіГ¦ГҐГЎГ­Г»Г© Г¬ГҐГІГ®Г¤ ГЇГ®Г«ГіГ·ГҐГ­ГЁГї (ГЈГҐГІГІГҐГ°) ГґГЁГ§ГЁГ·ГҐГ±ГЄГ®ГЈГ® ГЁГ­Г¤ГҐГЄГ±Г  ГЇГ® Г®ГІГ­Г®Г±ГЁГІГҐГ«ГјГ­Г®Г¬Гі
 	inline size_t get_mem_index(size_t i) const {
 		return ((i + _front) % _mem._capacity);
 	}
