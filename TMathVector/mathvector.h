@@ -35,3 +35,16 @@ public:
 	template<typename vector_type>
 	friend std::istream& operator>> (std::istream&, MathVector<vector_type>&);
 };
+
+template<typename vector_type>
+inline size_t MathVector<vector_type>::get_size() const noexcept {
+	return this->Vector<vector_type>::get_size();
+}
+template<typename vector_type>
+inline const vector_type MathVector<vector_type>::operator[](size_t i) const noexcept {
+	return this->Vector<vector_type>::operator[](i - 1);
+}
+template<typename vector_type>
+inline vector_type& MathVector<vector_type>::operator[](size_t i) noexcept {
+	return this->Vector<vector_type>::operator[](i - 1);
+}
