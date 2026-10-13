@@ -14,16 +14,20 @@ public:
     inline size_t getM() const noexcept;
     Matrix<vector_type> Transposition() const noexcept;
 
+    Matrix<vector_type> operator*(double) const;
+    Matrix<vector_type> operator/(double) const;
     Matrix<vector_type> operator*(const Matrix<vector_type>&) const;
-    bool operator==(const Matrix<vector_type>& other) const noexcept;
-    bool operator!=(const Matrix<vector_type>& other) const noexcept;
+    Matrix<vector_type>& operator*=(double);
+    Matrix<vector_type>& operator/=(double);
+    Matrix<vector_type>& operator*=(const Matrix<vector_type>&);
+    bool operator==(const Matrix<vector_type>&) const noexcept;
+    bool operator!=(const Matrix<vector_type>&) const noexcept;
 };
 
 template<typename vector_type>
 inline size_t Matrix<vector_type>::getN() const noexcept {
     return this->MathVector<MathVector<vector_type>>::get_size();
 }
-
 template<typename vector_type>
 inline size_t Matrix<vector_type>::getM() const noexcept {
     if (getN() == 0) {
@@ -32,6 +36,8 @@ inline size_t Matrix<vector_type>::getM() const noexcept {
     return this->Vector<MathVector<vector_type>>::operator[](0).get_size();
 }
 
+template<typename vector_type>
+inline Matrix<vector_type> operator*(double scalar, const Matrix<vector_type>& matrix);
 template<typename vector_type>
 std::ostream& operator<< (std::ostream&, const Matrix<vector_type>&);
 
@@ -91,6 +97,32 @@ Matrix<vector_type> Matrix<vector_type>::Transposition() const noexcept {
 }
 
 template<typename vector_type>
+Matrix<vector_type> Matrix<vector_type>::operator*(double scalar) const {
+    Matrix<vector_type> res(*this);
+    size_t N = this->getN();
+    size_t M = this->getM();
+    for (size_t i = 1; i <= N; ++i) {
+        for (size_t j = 1; j <= M; ++j) {
+            res[i][j]*=scalar;
+        }
+    }
+    return res;
+}
+template<typename vector_type>
+Matrix<vector_type> Matrix<vector_type>::operator/(double scalar) const {
+    if (scalar == 0) {
+        throw std::invalid_argument("ERROR: Division by zero!");
+    }
+    size_t N = this->getN();
+    Matrix<vector_type> res;
+    auto& non_const_this = const_cast<Matrix<vector_type>&>(*this);
+    for (size_t i = 1; i <= N; ++i) {
+        MathVector<vector_type> divided_row = non_const_this[i] * (1.0 / scalar);
+        res.push_back(divided_row);
+    }
+    return res;
+}
+template<typename vector_type>
 Matrix<vector_type> Matrix<vector_type>::operator*(const Matrix<vector_type>& other) const {
     size_t this_N = (*this).getN();
     size_t this_M = (*this).getM();
@@ -112,6 +144,21 @@ Matrix<vector_type> Matrix<vector_type>::operator*(const Matrix<vector_type>& ot
     return res;
 }
 template<typename vector_type>
+Matrix<vector_type>& Matrix<vector_type>::operator*=(double scalar) {
+    *this = *this * scalar;
+    return *this;
+}
+template<typename vector_type>
+Matrix<vector_type>& Matrix<vector_type>::operator/=(double scalar) {
+    *this = *this / scalar; //сам кинет эксепшн при /0
+    return *this;
+}
+template<typename vector_type>
+Matrix<vector_type>& Matrix<vector_type>::operator*=(const Matrix<vector_type>& other) {
+    *this = *this * other;
+    return *this;
+}
+template<typename vector_type>
 bool Matrix<vector_type>::operator==(const Matrix<vector_type>& other) const noexcept {
     if (this != &other) {
         if ((*this).getM() != other.getM() || (*this).getN() != other.getN()) {
@@ -131,6 +178,10 @@ bool Matrix<vector_type>::operator!=(const Matrix<vector_type>& other) const noe
     return !((*this) == other);
 }
 
+template<typename vector_type>
+inline Matrix<vector_type> operator*(double scalar, const Matrix<vector_type>& matrix) {
+    return matrix * scalar;
+}
 template<typename vector_type>
 inline std::ostream& operator<< (std::ostream& out, const Matrix<vector_type>& matrix) {
     size_t N = matrix.getN();

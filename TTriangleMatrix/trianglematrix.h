@@ -15,14 +15,20 @@ public:
     inline size_t getN() const noexcept;
     vector_type getDeterminant() const noexcept;
 
-    bool operator==(const TriangleMatrix<vector_type>& other) const noexcept;
-    bool operator!=(const TriangleMatrix<vector_type>& other) const noexcept;
-
-    TriangleMatrix<vector_type> operator*(const TriangleMatrix<vector_type>& other) const;
+    TriangleMatrix<vector_type> operator*(double) const;
+    TriangleMatrix<vector_type> operator*(const TriangleMatrix<vector_type>&) const;
+    TriangleMatrix<vector_type> operator/(double) const;
+    TriangleMatrix<vector_type>& operator*=(double);
+    TriangleMatrix<vector_type>& operator/=(double);
+    TriangleMatrix<vector_type>& operator*=(const TriangleMatrix<vector_type>&);
+    bool operator==(const TriangleMatrix<vector_type>&) const noexcept;
+    bool operator!=(const TriangleMatrix<vector_type>&) const noexcept;
 };
 
 template<typename vector_type>
 std::ostream& operator<<(std::ostream&, const TriangleMatrix<vector_type>&);
+template<typename vector_type>
+inline TriangleMatrix<vector_type> operator*(double, const TriangleMatrix<vector_type>&);
 
 template<typename vector_type>
 inline size_t TriangleMatrix<vector_type>::getN() const noexcept {
@@ -110,22 +116,29 @@ vector_type TriangleMatrix<vector_type>::getDeterminant() const noexcept {
 }
 
 template<typename vector_type>
-bool TriangleMatrix<vector_type>::operator==(const TriangleMatrix<vector_type>& other) const noexcept {
-    if (getN() != other.getN()) {
-        return false;
-    }
-    size_t N = getN();
+TriangleMatrix<vector_type> TriangleMatrix<vector_type>::operator*(double scalar) const {
+    size_t N = this->getN();
+    TriangleMatrix<vector_type> res(N);
     for (size_t i = 1; i <= N; ++i) {
-        if (this->MathVector<MathVector<vector_type>>::operator[](i) != other.MathVector<MathVector<vector_type>>::operator[](i)) {
-            return false;
+        for (size_t j = i; j <= N; ++j) {
+            res[i][j] = (*this)[i][j] * scalar;
         }
     }
-    return true;
+    return res;
 }
-
 template<typename vector_type>
-bool TriangleMatrix<vector_type>::operator!=(const TriangleMatrix<vector_type>& other) const noexcept {
-    return !((*this) == other);
+TriangleMatrix<vector_type> TriangleMatrix<vector_type>::operator/(double scalar) const {
+    if (scalar == 0.0) {
+        throw std::invalid_argument("ERROR: Division by zero!");
+    }
+    size_t N = this->getN();
+    TriangleMatrix<vector_type> res(N);
+    for (size_t i = 1; i <= N; ++i) {
+        for (size_t j = i; j <= N; ++j) {
+            res[i][j] = (*this)[i][j] * (1.0 / scalar);
+        }
+    }
+    return res;
 }
 template<typename vector_type>
 TriangleMatrix<vector_type> TriangleMatrix<vector_type>::operator*(const TriangleMatrix<vector_type>& other) const {
@@ -146,6 +159,38 @@ TriangleMatrix<vector_type> TriangleMatrix<vector_type>::operator*(const Triangl
     }
     return res;
 }
+template<typename vector_type>
+TriangleMatrix<vector_type>& TriangleMatrix<vector_type>::operator*=(double scalar) {
+    *this = *this * scalar;
+    return *this;
+}
+template<typename vector_type>
+TriangleMatrix<vector_type>& TriangleMatrix<vector_type>::operator/=(double scalar) {
+    *this = *this / scalar; // сам кинет эксепшн при /0
+    return *this;
+}
+template<typename vector_type>
+TriangleMatrix<vector_type>& TriangleMatrix<vector_type>::operator*=(const TriangleMatrix<vector_type>& other) {
+    *this = *this * other;
+    return *this;
+}
+template<typename vector_type>
+bool TriangleMatrix<vector_type>::operator==(const TriangleMatrix<vector_type>& other) const noexcept {
+    if (getN() != other.getN()) {
+        return false;
+    }
+    size_t N = getN();
+    for (size_t i = 1; i <= N; ++i) {
+        if (this->MathVector<MathVector<vector_type>>::operator[](i) != other.MathVector<MathVector<vector_type>>::operator[](i)) {
+            return false;
+        }
+    }
+    return true;
+}
+template<typename vector_type>
+bool TriangleMatrix<vector_type>::operator!=(const TriangleMatrix<vector_type>& other) const noexcept {
+    return !((*this) == other);
+}
 
 template<typename vector_type>
 std::ostream& operator<<(std::ostream& out, const TriangleMatrix<vector_type>& tm) {
@@ -163,4 +208,8 @@ std::ostream& operator<<(std::ostream& out, const TriangleMatrix<vector_type>& t
         out << "]\n";
     }
     return out;
+}
+template<typename vector_type>
+inline TriangleMatrix<vector_type> operator*(double scalar, const TriangleMatrix<vector_type>& tm) {
+    return tm * scalar;
 }

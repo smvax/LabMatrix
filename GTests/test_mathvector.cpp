@@ -529,6 +529,7 @@ TEST(ClassMathVector, can_cout) {
     MathVector<double> mv1(array, 5);
     std::stringstream ss;
     ss << mv1;
+
     EXPECT_EQ(ss.str(), "{ 0, 0.1, 0.2, 233, 5.89 }");
 }
 
@@ -536,10 +537,51 @@ TEST(ClassMathVector, can_cin) {
     std::stringstream ss("5 0.0 0.1 0.2 233.0 5.89");
     MathVector<double> mv1;
     ss >> mv1;
+
     EXPECT_DOUBLE_EQ(0.0, mv1[1]);
     EXPECT_DOUBLE_EQ(0.1, mv1[2]);
     EXPECT_DOUBLE_EQ(0.2, mv1[3]);
     EXPECT_DOUBLE_EQ(233.0, mv1[4]);
     EXPECT_DOUBLE_EQ(5.89, mv1[5]);
     EXPECT_EQ(5, mv1.get_size());
+}
+
+TEST(ClassMathVector, can_do_left_scalar_multiplication) {
+    MathVector<double> mv({ 1, -2.5, 0, 10.5 });
+    MathVector<double> mv_res = -3 * mv;
+
+    EXPECT_EQ(mv_res.get_size(), 4);
+    EXPECT_DOUBLE_EQ(mv_res[1], -3);
+    EXPECT_DOUBLE_EQ(mv_res[2], 7.5);
+    EXPECT_DOUBLE_EQ(mv_res[3], 0);
+    EXPECT_DOUBLE_EQ(mv_res[4], -31.5);
+
+    EXPECT_EQ(mv.get_size(), 4);
+    EXPECT_DOUBLE_EQ(mv[1], 1);
+    EXPECT_DOUBLE_EQ(mv[2], -2.5);
+    EXPECT_DOUBLE_EQ(mv[3], 0);
+    EXPECT_DOUBLE_EQ(mv[4], 10.5);
+}
+
+TEST(ClassMathVector, can_do_left_scalar_multiplication_by_zero) {
+    MathVector<double> mv({ 5.5, -10, 3.14 });
+    MathVector<double> mv_res = 0 * mv;
+
+    EXPECT_EQ(mv.get_size(), 3);
+    EXPECT_DOUBLE_EQ(mv[1], 5.5);
+    EXPECT_DOUBLE_EQ(mv[2], -10);
+    EXPECT_DOUBLE_EQ(mv[3], 3.14);
+
+    EXPECT_EQ(mv_res.get_size(), 3);
+    EXPECT_DOUBLE_EQ(mv_res[1], 0);
+    EXPECT_DOUBLE_EQ(mv_res[2], 0);
+    EXPECT_DOUBLE_EQ(mv_res[3], 0);
+}
+
+TEST(ClassMathVector, can_do_left_scalar_multiplication_to_empty) {
+    MathVector<double> mv;
+
+    MathVector<double> mv_res = 5 * mv;
+    EXPECT_EQ(mv.get_size(), 0);
+    EXPECT_EQ(mv_res.get_size(), 0);
 }

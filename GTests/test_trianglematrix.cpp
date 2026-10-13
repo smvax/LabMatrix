@@ -3,12 +3,14 @@
 
 TEST(ClassTriangleMatrix, can_create_with_default_constructor) {
     TriangleMatrix<double> matrix;
+
     EXPECT_EQ(matrix.getN(), 0);
 }
 
 TEST(ClassTriangleMatrix, can_create_with_constructor_by_size) {
     size_t size = 4;
     TriangleMatrix<double> matrix(size);
+
     EXPECT_EQ(matrix.getN(), size);
     for (size_t i = 1; i <= size; ++i) {
         EXPECT_EQ(matrix[i].get_size(), size - i + 1);
@@ -22,6 +24,7 @@ TEST(ClassTriangleMatrix, can_create_with_constructor_by_init_list) {
         {0, 0, 9}
         });
     size_t size = 3;
+
     for (size_t i = 1; i <= size; ++i) {
         EXPECT_EQ(matrix[i].get_size(), size - i + 1);
     }
@@ -53,6 +56,7 @@ TEST(ClassTriangleMatrix, can_create_with_copy_constructor_and_compare) {
         });
     TriangleMatrix<double> copy(matrix);
     size_t size = 3;
+
     for (size_t i = 1; i <= size; ++i) {
         EXPECT_EQ(matrix[i].get_size(), size - i + 1);
         EXPECT_EQ(copy[i].get_size(), size - i + 1);
@@ -69,6 +73,7 @@ TEST(ClassTriangleMatrix, can_create_from_ordinary_matrix) {
         });
     TriangleMatrix<double> tri_matrix(ord_matrix);
     size_t size = 3;
+
     for (size_t i = 1; i <= size; ++i) {
         EXPECT_EQ(tri_matrix[i].get_size(), size - i + 1);
     }
@@ -85,8 +90,11 @@ TEST(ClassTriangleMatrix, can_calculate_determinant) {
         {0, 5, 1},
         {0, 0, 3}
         });
+
     EXPECT_DOUBLE_EQ(matrix.getDeterminant(), 30);
+
     TriangleMatrix<double> empty_matrix;
+
     EXPECT_DOUBLE_EQ(empty_matrix.getDeterminant(), 0);
 }
 
@@ -108,6 +116,7 @@ TEST(ClassTriangleMatrix, can_multiply_triangle_matrices) {
         });
     TriangleMatrix<double> result = A * B;
     size_t size = 3;
+
     for (size_t i = 1; i <= size; ++i) {
         EXPECT_EQ(result[i].get_size(), size - i + 1);
     }
@@ -117,6 +126,7 @@ TEST(ClassTriangleMatrix, can_multiply_triangle_matrices) {
 TEST(ClassTriangleMatrix, throws_when_multiply_with_wrong_dimensions) {
     TriangleMatrix<double> A(3);
     TriangleMatrix<double> B(4);
+
     EXPECT_THROW(A * B, std::logic_error);
 }
 
@@ -129,5 +139,264 @@ TEST(ClassTriangleMatrix, can_cout) {
     std::stringstream ss;
     ss << matrix;
     std::string expected_output = "[ 1 2 3 ]\n[ 0 4 5 ]\n[ 0 0 6 ]\n";
+
     EXPECT_EQ(ss.str(), expected_output);
+}
+
+TEST(ClassTriangleMatrix, can_do_right_scalar_multiplication) {
+    TriangleMatrix<double> tm({
+        { 1.0, -2.5 },
+        { 0.0, 10.5 }
+        });
+    TriangleMatrix<double> tm_res = tm * -3;
+
+    EXPECT_EQ(tm_res.getN(), 2);
+    EXPECT_DOUBLE_EQ(tm_res[1][1], -3.0);
+    EXPECT_DOUBLE_EQ(tm_res[1][2], 7.5);
+    EXPECT_DOUBLE_EQ(tm_res[2][1], 0.0);
+    EXPECT_DOUBLE_EQ(tm_res[2][2], -31.5);
+    size_t size = 2;
+    for (size_t i = 1; i <= size; ++i) {
+        EXPECT_EQ(tm_res[i].get_size(), size - i + 1);
+    }
+
+    EXPECT_EQ(tm.getN(), 2);
+    EXPECT_DOUBLE_EQ(tm[1][1], 1.0);
+    EXPECT_DOUBLE_EQ(tm[1][2], -2.5);
+    EXPECT_DOUBLE_EQ(tm[2][1], 0.0);
+    EXPECT_DOUBLE_EQ(tm[2][2], 10.5);
+    for (size_t i = 1; i <= size; ++i) {
+        EXPECT_EQ(tm[i].get_size(), size - i + 1);
+    }
+}
+
+TEST(ClassTriangleMatrix, can_do_right_scalar_multiplication_by_zero) {
+    TriangleMatrix<double> tm({
+        { 5.5, -10.0, 3.14 },
+        { 0.0,  2.0,  1.0 },
+        { 0.0,  0.0,  7.0 }
+        });
+    TriangleMatrix<double> tm_res = tm * 0;
+
+    EXPECT_EQ(tm.getN(), 3);
+    EXPECT_DOUBLE_EQ(tm[1][1], 5.5);
+    EXPECT_DOUBLE_EQ(tm[1][2], -10.0);
+    EXPECT_DOUBLE_EQ(tm[1][3], 3.14);
+    EXPECT_DOUBLE_EQ(tm[2][1], 0.0);
+    EXPECT_DOUBLE_EQ(tm[2][2], 2.0);
+    EXPECT_DOUBLE_EQ(tm[2][3], 1.0);
+    EXPECT_DOUBLE_EQ(tm[3][1], 0.0);
+    EXPECT_DOUBLE_EQ(tm[3][2], 0.0);
+    EXPECT_DOUBLE_EQ(tm[3][3], 7.0);
+    size_t size = 3;
+    for (size_t i = 1; i <= size; ++i) {
+        EXPECT_EQ(tm[i].get_size(), size - i + 1);
+    }
+
+    EXPECT_EQ(tm_res.getN(), 3);
+    EXPECT_DOUBLE_EQ(tm_res[1][1], 0.0);
+    EXPECT_DOUBLE_EQ(tm_res[1][2], 0.0);
+    EXPECT_DOUBLE_EQ(tm_res[1][3], 0.0);
+    EXPECT_DOUBLE_EQ(tm_res[2][1], 0.0);
+    EXPECT_DOUBLE_EQ(tm_res[2][2], 0.0);
+    EXPECT_DOUBLE_EQ(tm_res[2][3], 0.0);
+    EXPECT_DOUBLE_EQ(tm_res[3][1], 0.0);
+    EXPECT_DOUBLE_EQ(tm_res[3][2], 0.0);
+    EXPECT_DOUBLE_EQ(tm_res[3][3], 0.0);
+    for (size_t i = 1; i <= size; ++i) {
+        EXPECT_EQ(tm_res[i].get_size(), size - i + 1);
+    }
+}
+
+TEST(ClassTriangleMatrix, can_do_right_scalar_multiplication_to_empty) {
+    TriangleMatrix<double> tm;
+
+    TriangleMatrix<double> tm_res = tm * 5;
+    EXPECT_EQ(tm.getN(), 0);
+    EXPECT_EQ(tm_res.getN(), 0);
+}
+
+
+TEST(ClassTriangleMatrix, can_do_left_scalar_multiplication) {
+    TriangleMatrix<double> tm({
+        { 1.0, -2.5 },
+        { 0.0, 10.5 }
+        });
+    TriangleMatrix<double> tm_res = -3 * tm;
+
+    EXPECT_EQ(tm_res.getN(), 2);
+    EXPECT_DOUBLE_EQ(tm_res[1][1], -3.0);
+    EXPECT_DOUBLE_EQ(tm_res[1][2], 7.5);
+    EXPECT_DOUBLE_EQ(tm_res[2][1], 0.0);
+    EXPECT_DOUBLE_EQ(tm_res[2][2], -31.5);
+    size_t size = 2;
+    for (size_t i = 1; i <= size; ++i) {
+        EXPECT_EQ(tm_res[i].get_size(), size - i + 1);
+    }
+
+    EXPECT_EQ(tm.getN(), 2);
+    EXPECT_DOUBLE_EQ(tm[1][1], 1.0);
+    EXPECT_DOUBLE_EQ(tm[1][2], -2.5);
+    EXPECT_DOUBLE_EQ(tm[2][1], 0.0);
+    EXPECT_DOUBLE_EQ(tm[2][2], 10.5);
+    for (size_t i = 1; i <= size; ++i) {
+        EXPECT_EQ(tm[i].get_size(), size - i + 1);
+    }
+}
+
+TEST(ClassTriangleMatrix, can_do_left_scalar_multiplication_by_zero) {
+    TriangleMatrix<double> tm({
+        { 5.5, -10.0, 3.14 },
+        { 0.0,  2.0,  1.0 },
+        { 0.0,  0.0,  7.0 }
+        });
+    TriangleMatrix<double> tm_res = 0 * tm;
+
+    EXPECT_EQ(tm.getN(), 3);
+    EXPECT_DOUBLE_EQ(tm[1][1], 5.5);
+    EXPECT_DOUBLE_EQ(tm[1][2], -10.0);
+    EXPECT_DOUBLE_EQ(tm[1][3], 3.14);
+    EXPECT_DOUBLE_EQ(tm[2][1], 0.0);
+    EXPECT_DOUBLE_EQ(tm[2][2], 2.0);
+    EXPECT_DOUBLE_EQ(tm[2][3], 1.0);
+    EXPECT_DOUBLE_EQ(tm[3][1], 0.0);
+    EXPECT_DOUBLE_EQ(tm[3][2], 0.0);
+    EXPECT_DOUBLE_EQ(tm[3][3], 7.0);
+    size_t size = 3;
+    for (size_t i = 1; i <= size; ++i) {
+        EXPECT_EQ(tm[i].get_size(), size - i + 1);
+    }
+
+    EXPECT_EQ(tm_res.getN(), 3);
+    EXPECT_DOUBLE_EQ(tm_res[1][1], 0.0);
+    EXPECT_DOUBLE_EQ(tm_res[1][2], 0.0);
+    EXPECT_DOUBLE_EQ(tm_res[1][3], 0.0);
+    EXPECT_DOUBLE_EQ(tm_res[2][1], 0.0);
+    EXPECT_DOUBLE_EQ(tm_res[2][2], 0.0);
+    EXPECT_DOUBLE_EQ(tm_res[2][3], 0.0);
+    EXPECT_DOUBLE_EQ(tm_res[3][1], 0.0);
+    EXPECT_DOUBLE_EQ(tm_res[3][2], 0.0);
+    EXPECT_DOUBLE_EQ(tm_res[3][3], 0.0);
+    for (size_t i = 1; i <= size; ++i) {
+        EXPECT_EQ(tm_res[i].get_size(), size - i + 1);
+    }
+}
+
+TEST(ClassTriangleMatrix, can_do_left_scalar_multiplication_to_empty) {
+    TriangleMatrix<double> tm;
+
+    TriangleMatrix<double> tm_res = 5 * tm;
+    EXPECT_EQ(tm.getN(), 0);
+    EXPECT_EQ(tm_res.getN(), 0);
+}
+
+TEST(ClassTriangleMatrix, can_do_scalar_multiplication_assignment) {
+    TriangleMatrix<double> tm({
+        { 2.0, -4.0 },
+        { 0.0,  3.0 }
+        });
+    tm *= 3.0;
+
+    EXPECT_EQ(tm.getN(), 2);
+    EXPECT_DOUBLE_EQ(tm[1][1], 6.0);
+    EXPECT_DOUBLE_EQ(tm[1][2], -12.0);
+    EXPECT_DOUBLE_EQ(tm[2][1], 0.0);
+    EXPECT_DOUBLE_EQ(tm[2][2], 9.0);
+    size_t size = 2;
+    for (size_t i = 1; i <= size; ++i) {
+        EXPECT_EQ(tm[i].get_size(), size - i + 1);
+    }
+}
+
+TEST(ClassTriangleMatrix, can_do_matrix_multiplication_assignment) {
+    TriangleMatrix<double> A({
+        { 1.0, 2.0 },
+        { 0.0, 3.0 }
+        });
+    TriangleMatrix<double> B({
+        { 4.0, 5.0 },
+        { 0.0, 2.0 }
+        });
+    A *= B;
+
+    EXPECT_EQ(A.getN(), 2);
+    EXPECT_DOUBLE_EQ(A[1][1], 4.0);
+    EXPECT_DOUBLE_EQ(A[1][2], 9.0);
+    EXPECT_DOUBLE_EQ(A[2][1], 0.0);
+    EXPECT_DOUBLE_EQ(A[2][2], 6.0);
+    size_t size = 2;
+    for (size_t i = 1; i <= size; ++i) {
+        EXPECT_EQ(A[i].get_size(), size - i + 1);
+    }
+
+    EXPECT_EQ(B.getN(), 2);
+    EXPECT_DOUBLE_EQ(B[1][1], 4.0);
+    EXPECT_DOUBLE_EQ(B[1][2], 5.0);
+    EXPECT_DOUBLE_EQ(B[2][1], 0.0);
+    EXPECT_DOUBLE_EQ(B[2][2], 2.0);
+    for (size_t i = 1; i <= size; ++i) {
+        EXPECT_EQ(B[i].get_size(), size - i + 1);
+    }
+}
+
+TEST(ClassTriangleMatrix, can_do_multiplication_assignment_to_empty) {
+    TriangleMatrix<double> tm_empty1;
+    TriangleMatrix<double> tm_empty2;
+    tm_empty1 *= 5.0;
+    tm_empty1 *= tm_empty2;
+
+    EXPECT_EQ(tm_empty1.getN(), 0);
+    EXPECT_EQ(tm_empty2.getN(), 0);
+}
+
+TEST(ClassTriangleMatrix, can_do_right_scalar_division) {
+    TriangleMatrix<double> tm({
+        { 4.0, -8.0 },
+        { 0.0, 12.0 }
+        });
+    TriangleMatrix<double> tm_res = tm / 4.0;
+
+    EXPECT_EQ(tm_res.getN(), 2);
+    EXPECT_DOUBLE_EQ(tm_res[1][1], 1.0);
+    EXPECT_DOUBLE_EQ(tm_res[1][2], -2.0);
+    EXPECT_DOUBLE_EQ(tm_res[2][1], 0.0);
+    EXPECT_DOUBLE_EQ(tm_res[2][2], 3.0);
+    size_t size = 2;
+    for (size_t i = 1; i <= size; ++i) {
+        EXPECT_EQ(tm_res[i].get_size(), size - i + 1);
+    }
+}
+
+TEST(ClassTriangleMatrix, can_do_scalar_division_assignment) {
+    TriangleMatrix<double> tm({
+        { 9.0, -18.0 },
+        { 0.0,  27.0 }
+        });
+    tm /= 9.0;
+
+    EXPECT_EQ(tm.getN(), 2);
+    EXPECT_DOUBLE_EQ(tm[1][1], 1.0);
+    EXPECT_DOUBLE_EQ(tm[1][2], -2.0);
+    EXPECT_DOUBLE_EQ(tm[2][1], 0.0);
+    EXPECT_DOUBLE_EQ(tm[2][2], 3.0);
+    size_t size = 2;
+    for (size_t i = 1; i <= size; ++i) {
+        EXPECT_EQ(tm[i].get_size(), size - i + 1);
+    }
+}
+
+TEST(ClassTriangleMatrix, division_throws_when_zero) {
+    TriangleMatrix<double> tm({ { 1.0, 2.0 }, { 0.0, 3.0 } });
+
+    EXPECT_THROW(tm / 0.0, std::invalid_argument);
+    EXPECT_THROW(tm /= 0.0, std::invalid_argument);
+}
+
+TEST(ClassTriangleMatrix, can_divide_empty) {
+    TriangleMatrix<double> tm;
+    TriangleMatrix<double> tm_res = tm / 2.0;
+    tm /= 2.0;
+
+    EXPECT_EQ(tm.getN(), 0);
+    EXPECT_EQ(tm_res.getN(), 0);
 }

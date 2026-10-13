@@ -53,6 +53,8 @@ template<typename vector_type>
 const vector_type MathVector<vector_type>::operator[](size_t i) const noexcept;
 template<typename vector_type>
 vector_type& MathVector<vector_type>::operator[](size_t i) noexcept;
+template<typename vector_type>
+inline MathVector<vector_type> operator*(double, const MathVector<vector_type>&);
 
 //============РЕАЛИЗАЦИЯ=============
 template<typename vector_type>
@@ -212,6 +214,10 @@ vector_type& MathVector<vector_type>::operator[](size_t i) noexcept {
 		return dummy_sink;
 	}
 	return this->Vector<vector_type>::operator[](i - _start_index);
+}
+template<typename vector_type>
+inline MathVector<vector_type> operator*(double scalar, const MathVector<vector_type>& mv) {
+	return mv * scalar;
 }
 
 //// инстанцирование шаблона (генерация объектного файла под определенный тд):
