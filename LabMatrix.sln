@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TMathVector", "TMathVector\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TMatrix", "TMatrix\TMatrix.vcxproj", "{A47C4C62-B26A-4124-81B4-DAF7036552E9}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TTriangleMatrix", "TTriangleMatrix\TTriangleMatrix.vcxproj", "{FEEC273B-CF98-4B28-A644-73604F6168E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -61,6 +63,14 @@ Global
 		{A47C4C62-B26A-4124-81B4-DAF7036552E9}.Release|x64.Build.0 = Release|x64
 		{A47C4C62-B26A-4124-81B4-DAF7036552E9}.Release|x86.ActiveCfg = Release|Win32
 		{A47C4C62-B26A-4124-81B4-DAF7036552E9}.Release|x86.Build.0 = Release|Win32
+		{FEEC273B-CF98-4B28-A644-73604F6168E1}.Debug|x64.ActiveCfg = Debug|x64
+		{FEEC273B-CF98-4B28-A644-73604F6168E1}.Debug|x64.Build.0 = Debug|x64
+		{FEEC273B-CF98-4B28-A644-73604F6168E1}.Debug|x86.ActiveCfg = Debug|Win32
+		{FEEC273B-CF98-4B28-A644-73604F6168E1}.Debug|x86.Build.0 = Debug|Win32
+		{FEEC273B-CF98-4B28-A644-73604F6168E1}.Release|x64.ActiveCfg = Release|x64
+		{FEEC273B-CF98-4B28-A644-73604F6168E1}.Release|x64.Build.0 = Release|x64
+		{FEEC273B-CF98-4B28-A644-73604F6168E1}.Release|x86.ActiveCfg = Release|Win32
+		{FEEC273B-CF98-4B28-A644-73604F6168E1}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

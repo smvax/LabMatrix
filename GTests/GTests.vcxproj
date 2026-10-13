@@ -57,7 +57,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>C:\Users\Maxim\LabMatrix\TMemData;C:\Users\Maxim\LabMatrix\TVector;C:\Users\Maxim\LabMatrix\TMathVector;C:\Users\Maxim\LabMatrix\TMatrix;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Maxim\LabMatrix\TMemData;C:\Users\Maxim\LabMatrix\TVector;C:\Users\Maxim\LabMatrix\TMathVector;C:\Users\Maxim\LabMatrix\TMatrix;C:\Users\Maxim\LabMatrix\TTriangleMatrix;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -109,6 +109,7 @@
     <ClCompile Include="test_mathvector.cpp" />
     <ClCompile Include="test_matrix.cpp" />
     <ClCompile Include="test_memdata.cpp" />
+    <ClCompile Include="test_trianglematrix.cpp" />
     <ClCompile Include="test_vector.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -123,6 +124,9 @@
     </ProjectReference>
     <ProjectReference Include="..\TMemData\TMemData.vcxproj">
       <Project>{317aef42-aba6-4b1b-83d9-0789ccdb6a1a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\TTriangleMatrix\TTriangleMatrix.vcxproj">
+      <Project>{feec273b-cf98-4b28-a644-73604f6168e1}</Project>
     </ProjectReference>
     <ProjectReference Include="..\TVector\TVector.vcxproj">
       <Project>{e8bb4fcc-afef-4bb1-8839-36e490be406e}</Project>

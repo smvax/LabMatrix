@@ -4,7 +4,7 @@
 
 template<typename vector_type>
 class MathVector : public Vector<vector_type> {
-	//size_t start_index; //<--- поле излишне, так как shrink_to_fit() сбрасывает _front
+	size_t _start_index = 1; // для TriangleMatrix, по умолчанию всегда 1
 public:
 	MathVector();
 	MathVector(const vector_type* data, size_t size);
@@ -14,6 +14,8 @@ public:
 	~MathVector() = default;
 	
 	inline size_t get_size() const noexcept;
+	inline void set_start_index(size_t) noexcept;
+	inline size_t get_start_index() const noexcept;
 
 	MathVector& operator=(const MathVector&);
 	MathVector& operator+=(const MathVector&);
@@ -37,6 +39,16 @@ inline size_t MathVector<vector_type>::get_size() const noexcept {
 	return this->Vector<vector_type>::get_size();
 }
 
+// сеттер и геттер для треугольных матриц:
+template<typename vector_type>
+inline void MathVector<vector_type>::set_start_index(size_t new_start_index) noexcept {
+	_start_index = new_start_index;
+}
+template<typename vector_type>
+inline size_t MathVector<vector_type>::get_start_index() const noexcept {
+	return _start_index;
+}
+
 template<typename vector_type>
 const vector_type MathVector<vector_type>::operator[](size_t i) const noexcept;
 template<typename vector_type>
@@ -57,6 +69,7 @@ MathVector<typename vector_type>::MathVector(std::initializer_list<vector_type> 
 }
 template<typename vector_type>
 MathVector<vector_type>::MathVector(const MathVector& other) : Vector<vector_type>(other) {
+	this->_start_index = other._start_index; //для треугольной
 	this->shrink_to_fit();
 }
 template<typename vector_type>
@@ -68,6 +81,7 @@ template<typename vector_type>
 MathVector<vector_type>& MathVector<vector_type>::operator=(const MathVector<vector_type>& other) {
 	if (this != &other) {
 		this->Vector<vector_type>::operator=(other);
+		this->_start_index = other._start_index; //для треугольной
 	}
 	return (*this);
 }
@@ -184,11 +198,20 @@ std::istream& operator>>(std::istream& in, MathVector<vector_type>& mv) {
 
 template<typename vector_type>
 const vector_type MathVector<vector_type>::operator[](size_t i) const noexcept {
-	return this->Vector<vector_type>::operator[](i - 1);
+	if (i < _start_index || i >= _start_index + this->get_size()) {
+		return vector_type(0); //для треугольной
+	}
+	return this->Vector<vector_type>::operator[](i - _start_index);
 }
 template<typename vector_type>
 vector_type& MathVector<vector_type>::operator[](size_t i) noexcept {
-	return this->Vector<vector_type>::operator[](i - 1);
+	if (i < _start_index || i >= _start_index + this->get_size()) {
+		// для треугольной (игнорируем запись ниже диагонали болванкой)
+		static vector_type dummy_sink = vector_type(0);
+		dummy_sink = vector_type(0);
+		return dummy_sink;
+	}
+	return this->Vector<vector_type>::operator[](i - _start_index);
 }
 
 //// инстанцирование шаблона (генерация объектного файла под определенный тд):
