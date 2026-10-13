@@ -16,10 +16,15 @@ public:
 
     Matrix<vector_type> operator*(double) const;
     Matrix<vector_type> operator/(double) const;
+    Matrix<vector_type> operator+(const Matrix<vector_type>& other) const;
+    Matrix<vector_type> operator-(const Matrix<vector_type>& other) const;
     Matrix<vector_type> operator*(const Matrix<vector_type>&) const;
     Matrix<vector_type>& operator*=(double);
     Matrix<vector_type>& operator/=(double);
+    Matrix<vector_type>& operator+=(const Matrix<vector_type>& other);
+    Matrix<vector_type>& operator-=(const Matrix<vector_type>& other);
     Matrix<vector_type>& operator*=(const Matrix<vector_type>&);
+
     bool operator==(const Matrix<vector_type>&) const noexcept;
     bool operator!=(const Matrix<vector_type>&) const noexcept;
 };
@@ -123,6 +128,34 @@ Matrix<vector_type> Matrix<vector_type>::operator/(double scalar) const {
     return res;
 }
 template<typename vector_type>
+Matrix<vector_type> Matrix<vector_type>::operator+(const Matrix<vector_type>& other) const {
+    if (this->getN() != other.getN() || this->getM() != other.getM()) {
+        throw std::logic_error("ERROR: Matrices dimensions must match for addition!");
+    }
+    size_t N = this->getN();
+    Matrix<vector_type> res;
+    Matrix<vector_type> matA(*this);
+    Matrix<vector_type> matB(other);
+    for (size_t i = 1; i <= N; ++i) {
+        res.push_back(matA[i] + matB[i]);
+    }
+    return res;
+}
+template<typename vector_type>
+Matrix<vector_type> Matrix<vector_type>::operator-(const Matrix<vector_type>& other) const {
+    if (this->getN() != other.getN() || this->getM() != other.getM()) {
+        throw std::logic_error("ERROR: Matrices dimensions must match for subtraction!");
+    }
+    size_t N = this->getN();
+    Matrix<vector_type> res;
+    Matrix<vector_type> matA(*this);
+    Matrix<vector_type> matB(other);
+    for (size_t i = 1; i <= N; ++i) {
+        res.push_back(matA[i] - matB[i]);
+    }
+    return res;
+}
+template<typename vector_type>
 Matrix<vector_type> Matrix<vector_type>::operator*(const Matrix<vector_type>& other) const {
     size_t this_N = (*this).getN();
     size_t this_M = (*this).getM();
@@ -151,6 +184,16 @@ Matrix<vector_type>& Matrix<vector_type>::operator*=(double scalar) {
 template<typename vector_type>
 Matrix<vector_type>& Matrix<vector_type>::operator/=(double scalar) {
     *this = *this / scalar; //сам кинет эксепшн при /0
+    return *this;
+}
+template<typename vector_type>
+Matrix<vector_type>& Matrix<vector_type>::operator+=(const Matrix<vector_type>& other) {
+    *this = *this + other;
+    return *this;
+}
+template<typename vector_type>
+Matrix<vector_type>& Matrix<vector_type>::operator-=(const Matrix<vector_type>& other) {
+    *this = *this - other;
     return *this;
 }
 template<typename vector_type>

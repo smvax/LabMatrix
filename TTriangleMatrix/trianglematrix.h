@@ -16,10 +16,14 @@ public:
     vector_type getDeterminant() const noexcept;
 
     TriangleMatrix<vector_type> operator*(double) const;
-    TriangleMatrix<vector_type> operator*(const TriangleMatrix<vector_type>&) const;
     TriangleMatrix<vector_type> operator/(double) const;
+    TriangleMatrix<vector_type> operator+(const TriangleMatrix<vector_type>& other) const;
+    TriangleMatrix<vector_type> operator-(const TriangleMatrix<vector_type>& other) const;
+    TriangleMatrix<vector_type> operator*(const TriangleMatrix<vector_type>&) const;
     TriangleMatrix<vector_type>& operator*=(double);
     TriangleMatrix<vector_type>& operator/=(double);
+    TriangleMatrix<vector_type>& operator+=(const TriangleMatrix<vector_type>& other);
+    TriangleMatrix<vector_type>& operator-=(const TriangleMatrix<vector_type>& other);
     TriangleMatrix<vector_type>& operator*=(const TriangleMatrix<vector_type>&);
     bool operator==(const TriangleMatrix<vector_type>&) const noexcept;
     bool operator!=(const TriangleMatrix<vector_type>&) const noexcept;
@@ -141,6 +145,38 @@ TriangleMatrix<vector_type> TriangleMatrix<vector_type>::operator/(double scalar
     return res;
 }
 template<typename vector_type>
+TriangleMatrix<vector_type> TriangleMatrix<vector_type>::operator+(const TriangleMatrix<vector_type>& other) const {
+    if (this->getN() != other.getN()) {
+        throw std::logic_error("ERROR: Triangle matrices dimensions must match for addition!");
+    }
+    size_t N = this->getN();
+    TriangleMatrix<vector_type> res;
+    TriangleMatrix<vector_type> matA(*this);
+    TriangleMatrix<vector_type> matB(other);
+    for (size_t i = 1; i <= N; ++i) {
+        MathVector<vector_type> row = matA[i] + matB[i];
+        row.set_start_index(i);
+        res.push_back(row);
+    }
+    return res;
+}
+template<typename vector_type>
+TriangleMatrix<vector_type> TriangleMatrix<vector_type>::operator-(const TriangleMatrix<vector_type>& other) const {
+    if (this->getN() != other.getN()) {
+        throw std::logic_error("ERROR: Triangle matrices dimensions must match for subtraction!");
+    }
+    size_t N = this->getN();
+    TriangleMatrix<vector_type> res;
+    TriangleMatrix<vector_type> matA(*this);
+    TriangleMatrix<vector_type> matB(other);
+    for (size_t i = 1; i <= N; ++i) {
+        MathVector<vector_type> row = matA[i] - matB[i];
+        row.set_start_index(i);
+        res.push_back(row);
+    }
+    return res;
+}
+template<typename vector_type>
 TriangleMatrix<vector_type> TriangleMatrix<vector_type>::operator*(const TriangleMatrix<vector_type>& other) const {
     size_t N = getN();
     if (N != other.getN()) {
@@ -167,6 +203,17 @@ TriangleMatrix<vector_type>& TriangleMatrix<vector_type>::operator*=(double scal
 template<typename vector_type>
 TriangleMatrix<vector_type>& TriangleMatrix<vector_type>::operator/=(double scalar) {
     *this = *this / scalar; // сам кинет эксепшн при /0
+    return *this;
+}
+template<typename vector_type>
+TriangleMatrix<vector_type>& TriangleMatrix<vector_type>::operator+=(const TriangleMatrix<vector_type>& other) {
+    *this = *this + other;
+    return *this;
+}
+
+template<typename vector_type>
+TriangleMatrix<vector_type>& TriangleMatrix<vector_type>::operator-=(const TriangleMatrix<vector_type>& other) {
+    *this = *this - other;
     return *this;
 }
 template<typename vector_type>

@@ -400,3 +400,91 @@ TEST(ClassTriangleMatrix, can_divide_empty) {
     EXPECT_EQ(tm.getN(), 0);
     EXPECT_EQ(tm_res.getN(), 0);
 }
+
+TEST(ClassTriangleMatrix, can_add_and_subtract_matrices) {
+    TriangleMatrix<double> A({
+        { 1.0, -2.5 },
+        { 0.0, 10.5 }
+        });
+    TriangleMatrix<double> B({
+        { 2.0,  1.5 },
+        { 0.0,  5.0 }
+        });
+    TriangleMatrix<double> expected_add({
+        { 3.0, -1.0 },
+        { 0.0, 15.5 }
+        });
+    TriangleMatrix<double> res_add = A + B;
+
+    EXPECT_EQ(res_add, expected_add);
+    EXPECT_DOUBLE_EQ(res_add[2][1], 0.0);
+
+    TriangleMatrix<double> expected_sub({
+        {-1.0, -4.0 },
+        { 0.0,  5.5 }
+        });
+    TriangleMatrix<double> res_sub = A - B;
+
+    EXPECT_EQ(res_sub, expected_sub);
+    EXPECT_DOUBLE_EQ(res_sub[2][1], 0.0);
+
+    size_t size = 2;
+    for (size_t i = 1; i <= size; ++i) {
+        EXPECT_EQ(res_add[i].get_size(), size - i + 1);
+        EXPECT_EQ(res_sub[i].get_size(), size - i + 1);
+    }
+}
+
+TEST(ClassTriangleMatrix, can_do_addition_assignment_and_subtraction_assignment) {
+    TriangleMatrix<double> A({
+        { 5.0,  2.0 },
+        { 0.0, -3.0 }
+        });
+    TriangleMatrix<double> B({
+        { 1.0,  3.0 },
+        { 0.0,  4.0 }
+        });
+    A += B;
+    TriangleMatrix<double> expected_inplace_add({
+        { 6.0,  5.0 },
+        { 0.0,  1.0 }
+        });
+
+    EXPECT_EQ(A, expected_inplace_add);
+
+    A -= B;
+    TriangleMatrix<double> expected_inplace_sub({
+        { 5.0,  2.0 },
+        { 0.0, -3.0 }
+        });
+
+    EXPECT_EQ(A, expected_inplace_sub);
+
+    size_t size = 2;
+    for (size_t i = 1; i <= size; ++i) {
+        EXPECT_EQ(A[i].get_size(), size - i + 1);
+    }
+}
+
+TEST(ClassTriangleMatrix, add_and_subtract_throws_when_wrong_dimensions) {
+    TriangleMatrix<double> A(2);
+    TriangleMatrix<double> B(3);
+
+    EXPECT_THROW(A + B, std::logic_error);
+    EXPECT_THROW(A - B, std::logic_error);
+    EXPECT_THROW(A += B, std::logic_error);
+    EXPECT_THROW(A -= B, std::logic_error);
+}
+
+TEST(ClassTriangleMatrix, can_add_and_subtract_empty) {
+    TriangleMatrix<double> A;
+    TriangleMatrix<double> B;
+    TriangleMatrix<double> res_add = A + B;
+    TriangleMatrix<double> res_sub = A - B;
+    A += B;
+    A -= B;
+
+    EXPECT_EQ(A.getN(), 0);
+    EXPECT_EQ(res_add.getN(), 0);
+    EXPECT_EQ(res_sub.getN(), 0);
+}

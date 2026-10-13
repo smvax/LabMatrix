@@ -316,3 +316,82 @@ TEST(ClassMatrix, can_divide_empty) {
     EXPECT_EQ(m.getN(), 0);
     EXPECT_EQ(m_res.getN(), 0);
 }
+
+TEST(ClassMatrix, can_add_and_subtract_matrices) {
+    Matrix<double> A({
+        { 1.0, -2.5 },
+        { 3.0,  4.0 }
+        });
+    Matrix<double> B({
+        { 2.0,  1.5 },
+        {-1.0,  5.0 }
+        });
+    Matrix<double> expected_add({
+        { 3.0, -1.0 },
+        { 2.0,  9.0 }
+        });
+    Matrix<double> res_add = A + B;
+
+    EXPECT_EQ(res_add, expected_add);
+
+    Matrix<double> expected_sub({
+        {-1.0, -4.0 },
+        { 4.0, -1.0 }
+        });
+    Matrix<double> res_sub = A - B;
+    EXPECT_EQ(res_sub, expected_sub);
+
+    EXPECT_EQ(A.getN(), 2);
+    EXPECT_DOUBLE_EQ(A[1][1], 1.0);
+    EXPECT_DOUBLE_EQ(A[1][2], -2.5);
+}
+
+TEST(ClassMatrix, can_do_addition_assignment_and_subtraction_assignment) {
+    Matrix<double> A({
+        { 5.0,  2.0 },
+        { 1.0, -3.0 }
+        });
+    Matrix<double> B({
+        { 1.0,  3.0 },
+        { -2.0, 4.0 }
+        });
+
+    A += B;
+    Matrix<double> expected_inplace_add({
+        { 6.0,  5.0 },
+        {-1.0,  1.0 }
+        });
+
+    EXPECT_EQ(A, expected_inplace_add);
+
+    A -= B;
+    Matrix<double> expected_inplace_sub({
+        { 5.0,  2.0 },
+        { 1.0, -3.0 }
+        });
+
+    EXPECT_EQ(A, expected_inplace_sub);
+}
+
+TEST(ClassMatrix, add_and_subtract_throws_when_wrong_dimensions) {
+    Matrix<double> A(2, 2);
+    Matrix<double> B(3, 3);
+
+    EXPECT_THROW(A + B, std::logic_error);
+    EXPECT_THROW(A - B, std::logic_error);
+    EXPECT_THROW(A += B, std::logic_error);
+    EXPECT_THROW(A -= B, std::logic_error);
+}
+
+TEST(ClassMatrix, can_add_and_subtract_empty) {
+    Matrix<double> A;
+    Matrix<double> B;
+    Matrix<double> res_add = A + B;
+    Matrix<double> res_sub = A - B;
+    A += B;
+    A -= B;
+
+    EXPECT_EQ(A.getN(), 0);
+    EXPECT_EQ(res_add.getN(), 0);
+    EXPECT_EQ(res_sub.getN(), 0);
+}
